@@ -15,8 +15,7 @@ builder.Services
                 policyBuilder.AllowAnyHeader();
                 policyBuilder.AllowAnyMethod();
                 policyBuilder.AllowAnyOrigin();
-            }))
-    .AddControllers();
+            }));
 
 await using var app = builder.Build();
 
