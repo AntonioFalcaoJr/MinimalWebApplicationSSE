@@ -1,4 +1,7 @@
+using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,7 +18,22 @@ builder.Services
             }))
     .AddControllers();
 
-var app = builder.Build();
+await using var app = builder.Build();
+
 app.UseCors("cors");
-app.MapControllers();
-app.Run();
+
+app.MapGet(
+    pattern: "/sse",
+    requestDelegate: async context =>
+    {
+        context.Response.Headers.Add("Content-Type", "text/event-stream");
+
+        while (true)
+        {
+            await context.Response.WriteAsync($"{DateTimeOffset.Now}\n");
+            await context.Response.Body.FlushAsync();
+            await Task.Delay(500);
+        }
+    });
+
+await app.RunAsync();
