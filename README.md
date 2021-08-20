@@ -1,4 +1,4 @@
-# WebApplicationSSE
+# MinimalWebApplicationSSE
 
 Minimal .NET 6 WebAPI - Server-Sent Events (SSE)
 
